@@ -168,4 +168,10 @@ public class Win32PlatformOptions
     /// Gets or sets the application's DPI awareness.
     /// </summary>
     public Win32DpiAwareness DpiAwareness { get; set; } = Win32DpiAwareness.PerMonitorDpiAware;
+
+    /// <summary>
+    /// Gets or sets the number of frames per second at which the renderer should run.
+    /// Default 60.
+    /// </summary>
+    public int Fps { get; set; } = 60;
 }

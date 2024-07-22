@@ -85,7 +85,8 @@ namespace Avalonia.Win32
 
             SetDpiAwareness();
 
-            var renderTimer = options.ShouldRenderOnUIThread ? new UiThreadRenderTimer(60) : new DefaultRenderTimer(60);
+            var fps = options.Fps;
+            var renderTimer = options.ShouldRenderOnUIThread ? new UiThreadRenderTimer(fps) : new DefaultRenderTimer(fps);
 
             AvaloniaLocator.CurrentMutable
                 .Bind<IClipboard>().ToSingleton<ClipboardImpl>()
