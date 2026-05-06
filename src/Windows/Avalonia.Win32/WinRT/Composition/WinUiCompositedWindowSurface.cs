@@ -122,6 +122,7 @@ namespace Avalonia.Win32.WinRT.Composition
             if (State.IsCorrupted)
                 throw new RenderTargetCorruptedException();
             var transaction = _window.BeginTransaction();
+            var completedTransaction = false;
             bool needsEndDraw = false;
             try
             {
@@ -157,12 +158,12 @@ namespace Avalonia.Win32.WinRT.Composition
                 using var texture = MicroComRuntime.CreateProxyFor<IUnknown>(pTexture, true);
 
                 var session = new Session(_surfaceInterop, texture, transaction, _size, offset, scale);
-                transaction = null;
+                completedTransaction = true;
                 return session;
             }
             finally
             {
-                if (transaction != null)
+                if (!completedTransaction)
                 {
                     if (needsEndDraw)
                         _surfaceInterop.EndDraw();

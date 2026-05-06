@@ -90,7 +90,7 @@ internal class OpenGlControlBaseResources : IAsyncDisposable
         _depthBufferSize = size;
     }
     
-    public IDisposable BeginDraw(PixelSize size)
+    public StructAnonymousDisposable BeginDraw(PixelSize size)
     {
         var restoreContext = Context.EnsureCurrent();
         IDisposable? imagePresent = null;
@@ -114,7 +114,7 @@ internal class OpenGlControlBaseResources : IAsyncDisposable
             }
 
             success = true;
-            return Disposable.Create(() =>
+            return new StructAnonymousDisposable(() =>
             {
                 try
                 {

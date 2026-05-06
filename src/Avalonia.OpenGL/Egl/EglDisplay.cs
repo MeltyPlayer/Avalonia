@@ -163,11 +163,13 @@ namespace Avalonia.OpenGL.Egl
             }
         }
         
-        public IDisposable Lock()
+        public StructAnonymousDisposable Lock()
         {
             Monitor.Enter(_lock);
-            return Disposable.Create(() => { Monitor.Exit(_lock); });
+            return new StructAnonymousDisposable(ExitLock);
         }
+
+        private void ExitLock() => Monitor.Exit(_lock);
 
         public void Dispose()
         {

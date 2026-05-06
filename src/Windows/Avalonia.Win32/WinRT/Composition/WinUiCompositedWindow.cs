@@ -94,11 +94,13 @@ internal class WinUiCompositedWindow : IDisposable
         }
     }
 
-    public IDisposable BeginTransaction()
+    public StructAnonymousDisposable BeginTransaction()
     {
         Monitor.Enter(_shared.SyncRoot);
-        return Disposable.Create(() => Monitor.Exit(_shared.SyncRoot));
+        return new StructAnonymousDisposable(ExitTransaction);
     }
+
+    private void ExitTransaction() => Monitor.Exit(_shared.SyncRoot);
 
     public void ResizeIfNeeded(PixelSize size)
     {

@@ -57,18 +57,20 @@ abstract class SwapchainBase<TImage> : IAsyncDisposable where TImage : class, IS
 
     protected abstract TImage CreateImage(PixelSize size);
 
-    protected IDisposable BeginDrawCore(PixelSize size, out TImage image)
+    protected StructAnonymousDisposable<TImage> BeginDrawCore(PixelSize size, out TImage image)
     {
         var img = CleanupAndFindNextImage(size) ?? CreateImage(size);
         
         img.BeginDraw();
         _pendingImages.Remove(img);
         image = img;
-        return Disposable.Create(() =>
-        {
-            img.Present();
-            _pendingImages.Add(img);
-        });
+        return new StructAnonymousDisposable<TImage>(img, PresentImageAndAddToPending);
+    }
+
+    private void PresentImageAndAddToPending(TImage image)
+    {
+        image.Present();
+        _pendingImages.Add(image);
     }
     
     public async ValueTask DisposeAsync()

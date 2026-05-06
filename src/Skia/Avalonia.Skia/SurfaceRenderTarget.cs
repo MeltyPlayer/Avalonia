@@ -115,8 +115,10 @@ namespace Avalonia.Skia
                 Gpu = _gpu,
             };
 
-            return new DrawingContextImpl(createInfo, Disposable.Create(() => Version++));
+            return new DrawingContextImpl(createInfo, new StructAnonymousDisposable(IncrementVersion));
         }
+
+        private void IncrementVersion() => Version++;
 
         public bool IsCorrupted => _gpu?.IsLost == true;
         /// <inheritdoc />
